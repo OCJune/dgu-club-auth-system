@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
-
 @Entity // 본 클래스가 JPA의 엔티티임을 의미
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 엔티티 필수: 기본 생성자 자동 생성, 직접 호출을 막기 위한 protected

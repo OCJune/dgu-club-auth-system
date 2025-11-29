@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // JPA 엔티티 필수: 기본 생성자 자동 생성, 직접 호출을 막기 위한 protected
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Table(name = "club") // DB의 테이블 정의
+@Table(name = "executive") // DB의 테이블 정의
 @EntityListeners(AuditingEntityListener.class)
 public class Executive extends BaseEntity {
     @Id // DB의 Primary Key
