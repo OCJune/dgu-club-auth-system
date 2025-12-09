@@ -36,5 +36,6 @@ public class Club extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "division_id", nullable = false)
+    @Setter
     private Division division; // 분과 아이디
 }

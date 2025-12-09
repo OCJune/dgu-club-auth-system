@@ -25,9 +25,11 @@ public class ExecutiveStudent extends BaseEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING) // Enum을 사용 시 데이터 형태 명시
     @Builder.Default
+    @Setter
     private Status status = Status.ACTIVE; // 상태
 
     @Column(name = "inactivated_at")
+    @Setter
     private LocalDateTime inactivatedAt; // 비활성화일
 
     @ManyToOne(fetch = FetchType.LAZY)
