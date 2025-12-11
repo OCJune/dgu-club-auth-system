@@ -71,3 +71,163 @@
 
 4. 데이터 기반 의사결정 지원
    - 동아리 운영 현황, 참여율 등 데이터를 활용해 정책 개선이 가능하다.
+
+## 🚀 구현된 기능
+
+### 1. 학생 정보 관리 API
+
+- `POST /api/students` - 학생 등록
+- `GET /api/students` - 학생 목록 조회
+- `GET /api/students/{id}` - 학생 단건 조회
+- `DELETE /api/students/{id}` - 학생 삭제
+
+### 2. 중앙동아리 정보 관리 API
+
+- `POST /api/clubs` - 동아리 등록
+- `GET /api/clubs` - 동아리 목록 조회
+- `GET /api/clubs/{id}` - 동아리 단건 조회
+- `PATCH /api/clubs/{id}/division` - 동아리 분과 변경
+- `DELETE /api/clubs/{id}` - 동아리 삭제
+- `POST /api/clubs/join` - 동아리 가입
+- `PATCH /api/clubs/memberships/{membershipId}/inactivate` - 동아리 탈퇴
+
+### 3. 분과 관리 API
+
+- `POST /api/divisions` - 분과 등록
+- `GET /api/divisions` - 분과 목록 조회
+- `GET /api/divisions/{id}` - 분과 단건 조회
+- `DELETE /api/divisions/{id}` - 분과 삭제
+
+### 4. 집행부 관리 API
+
+- `POST /api/executives` - 집행부 직책 등록
+- `GET /api/executives` - 집행부 목록 조회
+- `GET /api/executives/{id}` - 집행부 단건 조회
+- `DELETE /api/executives/{id}` - 집행부 삭제
+- `POST /api/executives/appoint` - 학생을 집행부에 임명
+- `PATCH /api/executives/appointments/{appointmentId}/retire` - 집행부 임명 해제
+
+### 5. QR 코드 인증 API
+
+- `POST /api/auth/qr/generate` - QR 코드 생성 (JWT 토큰 기반)
+- `POST /api/auth/qr/verify` - QR 코드 검증 및 인증 로그 기록
+
+### 6. 인증 로그 조회 API
+
+- `GET /api/auth-logs` - 전체 인증 로그 조회
+- `GET /api/auth-logs/student/{studentId}` - 특정 학생의 인증 로그 조회
+
+### 7. 보안 및 권한 관리
+
+- Spring Security 기반 인증/인가
+- CORS 설정 (프론트엔드 연동 준비)
+- JWT 기반 QR 토큰 생성 및 검증
+- 역할 기반 접근 제어 (RBAC) 구조
+
+## 🛠️ 기술 스택
+
+- **Backend**: Spring Boot 4.0.0, Java 21
+- **Database**: MySQL + Spring Data JPA
+- **Query**: QueryDSL
+- **Security**: Spring Security, JWT (JJWT)
+- **QR Code**: ZXing (Google)
+- **Build Tool**: Gradle
+
+## ⚙️ 환경 설정
+
+### 필수 환경 변수
+
+```bash
+# 데이터베이스 연결
+DB_URL=jdbc:mysql://localhost:3306/dgu_club_auth
+DB_USER=your_username
+DB_PW=your_password
+
+# JWT 설정 (선택사항, 기본값 제공됨)
+JWT_SECRET=your-secret-key-at-least-256-bits
+JWT_EXPIRATION=300
+```
+
+### Windows에서 환경 변수 설정
+
+```cmd
+# 현재 세션에서만 유효
+set DB_URL=jdbc:mysql://localhost:3306/dgu_club_auth
+set DB_USER=root
+set DB_PW=password
+
+# 영구 설정 (새 터미널에서 유효)
+setx DB_URL "jdbc:mysql://localhost:3306/dgu_club_auth"
+setx DB_USER "root"
+setx DB_PW "password"
+```
+
+## 📦 실행 방법
+
+### 1. 프로젝트 빌드
+
+```cmd
+gradlew clean build
+```
+
+### 2. 애플리케이션 실행
+
+```cmd
+gradlew bootRun
+```
+
+또는
+
+```cmd
+java -jar build\libs\dgu-club-auth-system-0.0.1-SNAPSHOT.jar
+```
+
+### 3. API 테스트
+
+서버 실행 후 `http://localhost:8080/docs` 에서 API 테스트 가능
+
+## 📝 API 사용 예시
+
+### QR 코드 생성 예시
+
+```json
+POST /api/auth/qr/generate
+Content-Type: application/json
+
+{
+  "studentId": 2021110000
+}
+```
+
+**응답:**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "qrCodeBase64": "iVBORw0KGgoAAAANSUhEUgAA...",
+  "expiresIn": 300
+}
+```
+
+### QR 코드 검증 예시
+
+```json
+POST /api/auth/qr/verify
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIs..."
+}
+```
+
+**응답:**
+
+```json
+{
+  "success": true,
+  "message": "인증에 성공했습니다.",
+  "studentId": 2021110000,
+  "studentName": "홍길동",
+  "authLogId": 1
+}
+```

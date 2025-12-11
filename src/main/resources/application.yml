@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: "DGU Central Club Authentication System"
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC 드라이버 클래스 이름
+    url: ${DB_URL} # jdbc:mysql://localhost:3306/{데이터베이스명}
+    username: ${DB_USER} # MySQL 유저 이름
+    password: ${DB_PW} # MySQL 비밀번호
+
+  jpa:
+    database: mysql # 사용할 데이터베이스 유형 지정 (MySQL)
+    database-platform: org.hibernate.dialect.MySQLDialect # Hibernate에서 사용할 MySQL 방언(dialect) 설정
+    show-sql: true # 실행된 SQL 쿼리를 콘솔에 출력할지 여부 설정
+    hibernate:
+      ddl-auto: update # 애플리케이션 실행 시 데이터베이스 스키마의 상태를 설정
+    properties:
+      hibernate:
+        format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+
+  # Tomcat 설정 (요청 크기 및 타임아웃 설정)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Server 설정
+server:
+  tomcat:
+    # 요청 라인 최대 크기 (기본값: 8192)
+    max-http-request-header-size: 16KB
+    # 요청 본문 최대 크기
+    max-http-post-size: 10MB
+    # 연결 타임아웃 (밀리초)
+    connection-timeout: 20000
+    # URI 인코딩
+    uri-encoding: UTF-8
+    # 손상된 요청에 대한 처리
+    accesslog:
+      enabled: false
+
+  # 에러 페이지 설정
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:dgu-club-auth-system-secret-key-for-qr-authentication-must-be-at-least-256-bits}
+  expiration: ${JWT_EXPIRATION:300} # 토큰 만료 시간 (초), 기본 5분
+
+# Logging 설정
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.dgu.clubauth: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+# Swagger/OpenAPI 설정
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /docs
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+  use-fqn: true
+  show-actuator: false
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+  # Querydsl 지원 비활성화
+  querydsl:
+    enabled: false
