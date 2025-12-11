@@ -1,0 +1,89 @@
+// src/main/java/com/dgu/clubauth/domain/club/service/ClubService.java
+
+package com.dgu.clubauth.domain.club.service;
+
+import com.dgu.clubauth.domain.club.entity.Club;
+import com.dgu.clubauth.domain.club.repository.ClubRepository;
+import com.dgu.clubauth.domain.division.entity.Division;
+import com.dgu.clubauth.domain.division.repository.DivisionRepository;
+import com.dgu.clubauth.domain.student.entity.Student;
+import com.dgu.clubauth.domain.student.repository.StudentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
+
+@Service
+@RequiredArgsConstructor // final 필드에 대한 생성자 자동 생성 및 의존성 주입
+public class ClubService {
+
+    private final ClubRepository clubRepository;
+    private final DivisionRepository divisionRepository;
+    private final StudentRepository studentRepository;
+
+    // ----------------------------------------------------------------------
+    // 1. CREATE (동아리 등록)
+    // ----------------------------------------------------------------------
+
+    /**
+     * 새로운 중앙동아리를 등록하고, 소속 분과 및 현재 회장을 지정합니다.
+     *
+     * @param name             동아리 이름
+     * @param divisionId       소속 분과 ID
+     * @param presidentStudentId 현재 회장 학생의 학번
+     * @param designatedAt     중앙동아리 지정일
+     * @return 저장된 Club 엔티티
+     */
+    @Transactional
+    public Club createClub(String name, Long divisionId, Long presidentStudentId, LocalDateTime designatedAt) {
+
+        // 1. 분과(Division) 엔티티 조회 및 검증
+        Division division = divisionRepository.findById(divisionId)
+                .orElseThrow(() -> new NoSuchElementException("ID: " + divisionId + "에 해당하는 분과를 찾을 수 없습니다."));
+
+        // 2. 회장(Student) 엔티티 조회 및 검증
+        Student president = studentRepository.findById(presidentStudentId)
+                .orElseThrow(() -> new NoSuchElementException("학번: " + presidentStudentId + "에 해당하는 학생(회장)을 찾을 수 없습니다."));
+
+        // 3. Club 엔티티 생성
+        Club newClub = Club.builder()
+                .name(name)
+                .division(division) // 분과 객체 연결 (FK 설정)
+                .president(president) // 회장 학생 객체 연결 (FK 설정)
+                .designatedAt(designatedAt)
+                .build();
+
+        // 4. DB에 저장 (INSERT)
+        return clubRepository.save(newClub);
+    }
+
+    // ----------------------------------------------------------------------
+    // 2. UPDATE (동아리 정보 수정)
+    // ----------------------------------------------------------------------
+
+    /**
+     * 동아리의 소속 분과를 변경합니다.
+     *
+     * @param clubId         변경할 동아리 ID
+     * @param newDivisionId  새로 지정할 분과 ID
+     * @return 변경된 Club 엔티티
+     */
+    @Transactional
+    public Club updateClubDivision(Long clubId, Long newDivisionId) {
+        // 1. 기존 Club 엔티티 조회
+        Club club = clubRepository.findById(clubId)
+                .orElseThrow(() -> new NoSuchElementException("ID: " + clubId + "에 해당하는 동아리를 찾을 수 없습니다."));
+
+        // 2. 새로운 Division 엔티티 조회
+        Division newDivision = divisionRepository.findById(newDivisionId)
+                .orElseThrow(() -> new NoSuchElementException("ID: " + newDivisionId + "에 해당하는 분과를 찾을 수 없습니다."));
+
+        // 3. 엔티티의 필드 업데이트
+        club.setDivision(newDivision);
+
+        // 4. @Transactional 덕분에 메소드 종료 시 변경된 상태가 자동으로 DB에 반영(UPDATE)됩니다.
+        return club;
+    }
+}
