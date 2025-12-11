@@ -126,11 +126,12 @@
 
 ## 🛠️ 기술 스택
 
-- **Backend**: Spring Boot 4.0.0, Java 21
+- **Backend**: Spring Boot 3.3.6, Java 21
 - **Database**: MySQL + Spring Data JPA
-- **Query**: QueryDSL
-- **Security**: Spring Security, JWT (JJWT)
-- **QR Code**: ZXing (Google)
+- **Query**: QueryDSL 5.1 (jakarta)
+- **Security**: Spring Security, JWT (JJWT 0.12.5)
+- **API 문서화**: Springdoc OpenAPI 2.6.0 (Swagger UI `/docs`, OpenAPI `/v3/api-docs`)
+- **QR Code**: ZXing (core/javase 3.5.3)
 - **Build Tool**: Gradle
 
 ## ⚙️ 환경 설정
