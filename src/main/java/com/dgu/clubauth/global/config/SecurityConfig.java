@@ -55,6 +55,13 @@ public class SecurityConfig {
                         
                         // 헬스 체크 및 기본 정보
                         .requestMatchers("/", "/actuator/**", "/health").permitAll()
+
+                    // Swagger / API 문서 접근 허용
+                    .requestMatchers(
+                        "/docs", "/docs/**",
+                        "/swagger-ui.html", "/swagger-ui/**",
+                        "/v3/api-docs", "/v3/api-docs/**"
+                    ).permitAll()
                         
                         // 조회(GET) 요청은 인증된 사용자만 허용
                         .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
@@ -97,7 +104,10 @@ public class SecurityConfig {
         configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // 필요한 경로에만 CORS 허용 (API, Swagger UI 등)
         source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/docs/**", configuration);
+        source.registerCorsConfiguration("/v3/api-docs/**", configuration);
         return source;
     }
 }

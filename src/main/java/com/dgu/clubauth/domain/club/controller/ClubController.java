@@ -10,6 +10,8 @@ import com.dgu.clubauth.domain.club.repository.ClubRepository;
 import com.dgu.clubauth.domain.club.service.ClubService;
 import com.dgu.clubauth.domain.club.service.ClubStudentService;
 import com.dgu.clubauth.global.exception.ResourceNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/clubs")
 @RequiredArgsConstructor
+@Tag(name = "Club", description = "동아리 관리 API")
 public class ClubController {
     
     private final ClubService clubService;
@@ -31,6 +34,7 @@ public class ClubController {
      * 동아리 등록
      */
     @PostMapping
+    @Operation(summary = "동아리 등록", description = "새로운 동아리를 등록합니다.")
     public ResponseEntity<ClubResponse> createClub(@RequestBody ClubRequest.Create request) {
         Club club = clubService.createClub(
                 request.getName(),
@@ -93,6 +97,7 @@ public class ClubController {
      * 동아리 가입
      */
     @PostMapping("/join")
+    @Operation(summary = "동아리 가입", description = "학생이 동아리에 가입하고 직책을 부여받습니다.")
     public ResponseEntity<ClubStudentResponse> joinClub(@RequestBody ClubStudentRequest.Join request) {
         ClubStudent clubStudent = clubStudentService.joinClubAndSetRole(
                 request.getStudentId(),

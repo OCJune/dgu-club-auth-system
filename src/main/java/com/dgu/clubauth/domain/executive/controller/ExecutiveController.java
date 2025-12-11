@@ -7,6 +7,8 @@ import com.dgu.clubauth.domain.executive.repository.ExecutiveRepository;
 import com.dgu.clubauth.domain.executive.service.ExecutiveService;
 import com.dgu.clubauth.domain.executive.service.ExecutiveStudentService;
 import com.dgu.clubauth.global.exception.ResourceNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/executives")
 @RequiredArgsConstructor
+@Tag(name = "Executive", description = "집행부 관리 API")
 public class ExecutiveController {
     
     private final ExecutiveService executiveService;
@@ -28,6 +31,7 @@ public class ExecutiveController {
      * 집행부 직책 등록
      */
     @PostMapping
+    @Operation(summary = "집행부 직책 등록", description = "새로운 집행부 직책을 등록합니다.")
     public ResponseEntity<ExecutiveResponse> createExecutive(@RequestBody ExecutiveRequest.Create request) {
         Executive executive = executiveService.createExecutive(
                 request.getDepartment(),
