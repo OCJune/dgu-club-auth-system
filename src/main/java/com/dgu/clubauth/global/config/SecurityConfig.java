@@ -104,8 +104,10 @@ public class SecurityConfig {
         configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Swagger UI 등 모든 경로에 대해 CORS 허용
-        source.registerCorsConfiguration("/**", configuration);
+        // 필요한 경로에만 CORS 허용 (API, Swagger UI 등)
+        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/docs/**", configuration);
+        source.registerCorsConfiguration("/v3/api-docs/**", configuration);
         return source;
     }
 }
