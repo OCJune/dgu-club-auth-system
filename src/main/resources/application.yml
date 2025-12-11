@@ -17,3 +17,45 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+
+  # Tomcat 설정 (요청 크기 및 타임아웃 설정)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Server 설정
+server:
+  tomcat:
+    # 요청 라인 최대 크기 (기본값: 8192)
+    max-http-request-header-size: 16KB
+    # 요청 본문 최대 크기
+    max-http-post-size: 10MB
+    # 연결 타임아웃 (밀리초)
+    connection-timeout: 20000
+    # URI 인코딩
+    uri-encoding: UTF-8
+    # 손상된 요청에 대한 처리
+    accesslog:
+      enabled: false
+
+  # 에러 페이지 설정
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: false
+
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:dgu-club-auth-system-secret-key-for-qr-authentication-must-be-at-least-256-bits}
+  expiration: ${JWT_EXPIRATION:300} # 토큰 만료 시간 (초), 기본 5분
+
+# Logging 설정
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    com.dgu.clubauth: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
