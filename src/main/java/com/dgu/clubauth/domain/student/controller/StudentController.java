@@ -7,6 +7,8 @@ import com.dgu.clubauth.domain.student.repository.StudentRepository;
 import com.dgu.clubauth.domain.student.service.StudentService;
 import com.dgu.clubauth.global.exception.DuplicateResourceException;
 import com.dgu.clubauth.global.exception.ResourceNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/students")
 @RequiredArgsConstructor
+@Tag(name = "Student", description = "학생 관리 API")
 public class StudentController {
     
     private final StudentService studentService;
@@ -27,6 +30,7 @@ public class StudentController {
      * 학생 등록
      */
     @PostMapping
+    @Operation(summary = "학생 등록", description = "새로운 학생을 등록합니다. 학번은 직접 지정합니다.")
     public ResponseEntity<StudentResponse> createStudent(@RequestBody StudentRequest.Create request) {
         // 중복 학번 체크
         if (studentRepository.existsById(request.getId())) {

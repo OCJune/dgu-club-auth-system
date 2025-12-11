@@ -231,19 +231,3 @@ Content-Type: application/json
   "authLogId": 1
 }
 ```
-
-## 🚨 문제 해결
-
-### HTTP 400 Bad Request - Invalid HTTP Method 오류
-
-**증상**: `Invalid character found in method name [0x16...]` 오류 발생
-
-**해결 방법**:
-1. 클라이언트의 HTTP 요청이 올바른 형식인지 확인
-2. Content-Type 헤더 설정 확인 (기본값: `application/json`)
-3. 서버 로그에서 상세 정보 확인 (DEBUG 레벨로 설정)
-4. 요청 크기가 10MB를 초과하지 않는지 확인
-
-**상세 가이드**: `HTTP_ERROR_GUIDE.md` 참고
-
-## 📞 지원 및 문의
