@@ -184,7 +184,7 @@ java -jar build\libs\dgu-club-auth-system-0.0.1-SNAPSHOT.jar
 
 ### 3. API 테스트
 
-서버 실행 후 `http://localhost:8080` 에서 API 테스트 가능
+서버 실행 후 `http://localhost:8080/docs` 에서 API 테스트 가능
 
 ## 📝 API 사용 예시
 
