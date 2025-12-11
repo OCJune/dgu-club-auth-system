@@ -62,12 +62,9 @@ public class SecurityConfig {
                         "/swagger-ui.html", "/swagger-ui/**",
                         "/v3/api-docs", "/v3/api-docs/**"
                     ).permitAll()
-                        
-                        // 조회(GET) 요청은 인증된 사용자만 허용
-                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-                        
-                        // 생성/수정/삭제는 ADMIN 또는 EXECUTIVE 역할만 허용
-                        // (향후 UserRole 엔티티 기반으로 동적 권한 관리 가능)
+
+                        // TODO: 향후 UserRole 엔티티 기반으로 동적 권한 관리 가능
+                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // 임시로 허용
                         .requestMatchers(HttpMethod.POST, "/api/**").permitAll() // 임시로 허용
                         .requestMatchers(HttpMethod.PUT, "/api/**").permitAll() // 임시로 허용
                         .requestMatchers(HttpMethod.PATCH, "/api/**").permitAll() // 임시로 허용
