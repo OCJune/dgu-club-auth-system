@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor // final 필드에 대한 생성자 자동 생성 및 의존성 주입
@@ -29,15 +28,15 @@ public class ClubService {
     // ----------------------------------------------------------------------
 
     /**
-     * 새로운 중앙동아리를 등록하고, 소속 분과 및 현재 회장을 지정합니다.
-     *
-     * @param name             동아리 이름
-     * @param divisionId       소속 분과 ID
-        * @param presidentStudentId 현재 회장 학생의 학번
-        * @param designatedAt     중앙동아리 지정일
-        * @param professor        지도교수 이름 (선택)
-     * @return 저장된 Club 엔티티
-     */
+          * 새로운 중앙동아리를 등록하고, 소속 분과 및 현재 회장을 지정합니다.
+          *
+          * @param name               동아리 이름
+          * @param divisionId         소속 분과 ID
+          * @param presidentStudentId 현재 회장 학생의 학번
+          * @param designatedAt       중앙동아리 지정일
+          * @param professor          지도교수 이름 (선택)
+          * @return 저장된 Club 엔티티
+          */
     @Transactional
     public Club createClub(String name, Long divisionId, Long presidentStudentId, LocalDateTime designatedAt, String professor) {
 
@@ -77,11 +76,11 @@ public class ClubService {
     public Club updateClubDivision(Long clubId, Long newDivisionId) {
         // 1. 기존 Club 엔티티 조회
         Club club = clubRepository.findById(clubId)
-                .orElseThrow(() -> new NoSuchElementException("ID: " + clubId + "에 해당하는 동아리를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("동아리", clubId));
 
         // 2. 새로운 Division 엔티티 조회
         Division newDivision = divisionRepository.findById(newDivisionId)
-                .orElseThrow(() -> new NoSuchElementException("ID: " + newDivisionId + "에 해당하는 분과를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("분과", newDivisionId));
 
         // 3. 엔티티의 필드 업데이트
         club.setDivision(newDivision);

@@ -9,12 +9,12 @@ import com.dgu.clubauth.domain.executive.repository.ExecutiveStudentRepository;
 import com.dgu.clubauth.domain.student.entity.Student;
 import com.dgu.clubauth.domain.student.repository.StudentRepository;
 import com.dgu.clubauth.global.enums.Status; // 상태 ENUM (ACTIVE, INACTIVE)
+import com.dgu.clubauth.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +32,9 @@ public class ExecutiveStudentService {
 
         // 1. 참조 엔티티 조회 및 검증
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new NoSuchElementException("학생(학번: " + studentId + ")을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("학생", studentId));
         Executive executive = executiveRepository.findById(executiveId)
-                .orElseThrow(() -> new NoSuchElementException("집행부 직책(ID: " + executiveId + ")을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("집행부 직책", executiveId));
 
         // 2. 새로운 ExecutiveStudent 이력 엔티티 생성
         ExecutiveStudent newAppointment = ExecutiveStudent.builder()
@@ -53,7 +53,7 @@ public class ExecutiveStudentService {
     @Transactional
     public void retireExecutive(Long executiveStudentId) {
         ExecutiveStudent appointment = executiveStudentRepository.findById(executiveStudentId)
-                .orElseThrow(() -> new NoSuchElementException("집행부 이력(ID: " + executiveStudentId + ")을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("집행부 이력", executiveStudentId));
 
         // 1. 상태 변경
         appointment.setStatus(Status.INACTIVE);

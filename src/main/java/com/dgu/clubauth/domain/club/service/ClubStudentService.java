@@ -8,12 +8,12 @@ import com.dgu.clubauth.domain.club.enums.Role; // 동아리 직책 ENUM (PRESID
 import com.dgu.clubauth.domain.student.entity.Student;
 import com.dgu.clubauth.domain.student.repository.StudentRepository;
 import com.dgu.clubauth.global.enums.Status; // 상태 ENUM (ACTIVE, INACTIVE)
+import com.dgu.clubauth.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ public class ClubStudentService {
 
         // 1. 참조 엔티티 조회 및 검증
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new NoSuchElementException("학생(학번: " + studentId + ")을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("학생", studentId));
         Club club = clubRepository.findById(clubId)
-                .orElseThrow(() -> new NoSuchElementException("동아리(ID: " + clubId + ")를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("동아리", clubId));
 
         // 2. 새로운 ClubStudent 이력 엔티티 생성
         ClubStudent newMembership = ClubStudent.builder()
@@ -53,7 +53,7 @@ public class ClubStudentService {
     @Transactional
     public void inactivateMembership(Long clubStudentId) {
         ClubStudent membership = clubStudentRepository.findById(clubStudentId)
-                .orElseThrow(() -> new NoSuchElementException("소속 이력(ID: " + clubStudentId + ")을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("동아리 소속 이력", clubStudentId));
 
         // 1. 상태 변경 (setter나 변경 메소드가 엔티티에 정의되어 있다고 가정)
         membership.setStatus(Status.INACTIVE);
