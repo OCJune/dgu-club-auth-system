@@ -8,6 +8,7 @@ import com.dgu.clubauth.domain.division.entity.Division;
 import com.dgu.clubauth.domain.division.repository.DivisionRepository;
 import com.dgu.clubauth.domain.student.entity.Student;
 import com.dgu.clubauth.domain.student.repository.StudentRepository;
+import com.dgu.clubauth.global.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,20 +33,21 @@ public class ClubService {
      *
      * @param name             동아리 이름
      * @param divisionId       소속 분과 ID
-     * @param presidentStudentId 현재 회장 학생의 학번
-     * @param designatedAt     중앙동아리 지정일
+        * @param presidentStudentId 현재 회장 학생의 학번
+        * @param designatedAt     중앙동아리 지정일
+        * @param professor        지도교수 이름 (선택)
      * @return 저장된 Club 엔티티
      */
     @Transactional
-    public Club createClub(String name, Long divisionId, Long presidentStudentId, LocalDateTime designatedAt) {
+    public Club createClub(String name, Long divisionId, Long presidentStudentId, LocalDateTime designatedAt, String professor) {
 
         // 1. 분과(Division) 엔티티 조회 및 검증
         Division division = divisionRepository.findById(divisionId)
-                .orElseThrow(() -> new NoSuchElementException("ID: " + divisionId + "에 해당하는 분과를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("분과", divisionId));
 
         // 2. 회장(Student) 엔티티 조회 및 검증
         Student president = studentRepository.findById(presidentStudentId)
-                .orElseThrow(() -> new NoSuchElementException("학번: " + presidentStudentId + "에 해당하는 학생(회장)을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException("학생", presidentStudentId));
 
         // 3. Club 엔티티 생성
         Club newClub = Club.builder()
@@ -53,6 +55,7 @@ public class ClubService {
                 .division(division) // 분과 객체 연결 (FK 설정)
                 .president(president) // 회장 학생 객체 연결 (FK 설정)
                 .designatedAt(designatedAt)
+                .professor(professor) // nullable
                 .build();
 
         // 4. DB에 저장 (INSERT)

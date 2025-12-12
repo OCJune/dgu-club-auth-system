@@ -91,6 +91,23 @@
 - `POST /api/clubs/join` - 동아리 가입
 - `PATCH /api/clubs/memberships/{membershipId}/inactivate` - 동아리 탈퇴
 
+동아리 등록 요청 예시:
+
+```json
+POST /api/clubs
+Content-Type: application/json
+
+{
+   "name": "컴퓨터과학 동아리",
+   "designatedAt": "2024-03-01T00:00:00",
+   "professor": "김교수",
+   "presidentId": 2021110001,
+   "divisionId": 1
+}
+```
+
+모든 필수 필드(name, designatedAt, presidentId, divisionId)가 누락되면 400 Bad Request가 반환됩니다.
+
 ### 3. 분과 관리 API
 
 - `POST /api/divisions` - 분과 등록

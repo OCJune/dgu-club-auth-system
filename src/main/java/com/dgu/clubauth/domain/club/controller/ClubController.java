@@ -35,12 +35,13 @@ public class ClubController {
      */
     @PostMapping
     @Operation(summary = "동아리 등록", description = "새로운 동아리를 등록합니다.")
-    public ResponseEntity<ClubResponse> createClub(@RequestBody ClubRequest.Create request) {
+    public ResponseEntity<ClubResponse> createClub(@jakarta.validation.Valid @RequestBody ClubRequest.Create request) {
         Club club = clubService.createClub(
                 request.getName(),
                 request.getDivisionId(),
                 request.getPresidentId(),
-                request.getDesignatedAt()
+                request.getDesignatedAt(),
+                request.getProfessor()
         );
         
         return ResponseEntity.status(HttpStatus.CREATED).body(ClubResponse.from(club));
