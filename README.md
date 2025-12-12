@@ -53,7 +53,7 @@
 
 ## 🗃️ ERD 설계
 
-![ERD](./erd.png)
+<img src="./erd.png" width="80%" alt="ERD">
 
 ## ✨ 기대 효과
 
