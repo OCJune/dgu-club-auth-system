@@ -31,7 +31,7 @@ public class StudentController {
      */
     @PostMapping
     @Operation(summary = "학생 등록", description = "새로운 학생을 등록합니다. 학번은 직접 지정합니다.")
-    public ResponseEntity<StudentResponse> createStudent(@RequestBody StudentRequest.Create request) {
+    public ResponseEntity<StudentResponse> createStudent(@jakarta.validation.Valid @RequestBody StudentRequest.Create request) {
         // 중복 학번 체크
         if (studentRepository.existsById(request.getId())) {
             throw new DuplicateResourceException("이미 등록된 학번입니다: " + request.getId());
